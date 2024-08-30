@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "reset-kv": "deno run --unstable-kv scripts/reset_kv.ts"
+  }
+}

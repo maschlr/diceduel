@@ -1,0 +1,2 @@
+- [TONConnect USDT Payment Example (with Testnet Faucet links)](https://github.com/ton-community/tma-usdt-payments-demo/tree/master)
+- [Grammy TypeScript Telegram Bot Framework Test Examples](https://github.com/PavelPolyakov/grammy-with-tests/blob/master/__tests__/bot.test.js)
