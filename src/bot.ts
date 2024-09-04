@@ -1,12 +1,15 @@
 import { Bot, Context } from "../deps.ts";
 import { newGameCommand } from "./handlers/newGame.ts";
 import { listGamesCommand } from "./handlers/listGames.ts";
-import { acceptGameHandler, revengeHandler } from "./handlers/acceptGame.ts";
+import { acceptGameHandler } from "./handlers/acceptGame.ts";
+import { revengeHandler } from "./handlers/revengeGame.ts";
 import { rollDiceHandler } from "./handlers/rollDice.ts";
+import { scoreBoardHandler } from "./handlers/scoreBoard.ts";
 
 export async function setupBot(bot: Bot) {
   bot.command("newgame", newGameCommand);
   bot.command("listgames", listGamesCommand);
+  bot.command("scoreboard", scoreBoardHandler);
   bot.on("callback_query:data", async (ctx) => {
     const [fnc, arg] = ctx.callbackQuery.data.split(":");
     if (fnc === "accept_game") {
