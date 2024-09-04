@@ -1,7 +1,4 @@
-import {
-  assertEquals,
-  assertNotEquals,
-} from "https://deno.land/std@0.192.0/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std@0.192.0/testing/asserts.ts";
 import { Context } from "../deps.ts";
 import {
   createGame,
@@ -10,7 +7,7 @@ import {
   listGamesInChat,
   updateGame,
 } from "../src/storage/kv.ts";
-import { Game, GameState, Player } from "../src/models/game.ts";
+import { GameState, Player } from "../src/models/game.ts";
 
 let kv: Deno.Kv;
 
