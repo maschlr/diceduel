@@ -51,6 +51,6 @@ export async function newGameCommand(ctx: Context) {
 
   await ctx.reply(
     `🎲 @${challenger.username} has challenged @${opponent.username} to a dice duel with ${winningRounds} winning rounds! 🎲`,
-    { reply_markup: keyboard },
+    { reply_markup: keyboard, protect_content: true },
   );
 }
