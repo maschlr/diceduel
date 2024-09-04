@@ -1,8 +1,11 @@
 import { assertEquals } from "https://deno.land/std@0.192.0/testing/asserts.ts";
-import { Game, GameState } from "../models/game.ts";
-import { determineScore, listGamesInChat, updateGameRoll } from "./kv.ts";
-import { Context } from "../../deps.ts";
-import { Player, RollStatus } from "../models/game.ts";
+import {
+  determineScore,
+  listGamesInChat,
+  updateGameRoll,
+} from "../src/storage/kv.ts";
+import { Context } from "../deps.ts";
+import { Game, GameState, Player, RollStatus } from "../src/models/game.ts";
 
 Deno.test("determineScore", async (t) => {
   await t.step("should return 0-0 for empty rolls", () => {

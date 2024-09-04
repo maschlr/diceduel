@@ -9,7 +9,12 @@ import {
 import { ulid } from "jsr:@std/ulid";
 import { Context } from "../../deps.ts";
 
-const kv_ = await Deno.openKv();
+let kv_: Deno.Kv;
+try {
+  kv_ = await Deno.openKv();
+} catch (e) {
+  console.error("Failed to open KV store", e);
+}
 
 export async function getPlayer(
   ctx: Context,
