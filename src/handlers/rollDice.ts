@@ -78,7 +78,7 @@ export async function rollDiceHandler(ctx: Context) {
         );
       } else {
         await ctx.reply(
-          `Winnder, winner, chicken dinner! @${player.username} rolls a ${rollScore} and looses this round and the match! The winner is: @${otherPlayerUsername}!\n\n${scoreCard}`,
+          `Winner, winner, chicken dinner! @${player.username} rolls a ${rollScore} and looses this round and the match! The winner is: @${otherPlayerUsername}!\n\n${scoreCard}`,
         );
       }
       break;
