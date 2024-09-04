@@ -1,5 +1,9 @@
 import { Context } from "../../deps.ts";
-import { determineScore, listGamesInChat } from "../storage/kv.ts";
+import {
+  determineScore,
+  getPlayerFromId,
+  listGamesInChat,
+} from "../storage/kv.ts";
 import { GameState } from "../models/game.ts";
 export async function scoreBoardHandler(ctx: Context) {
   const chatId = ctx.chat?.id.toString() || "";
@@ -28,6 +32,19 @@ export async function scoreBoardHandler(ctx: Context) {
     a,
     b,
   ) => b[1] - a[1]);
+  const playerIdToName = new Map<string, string>();
+
+  const promises = [];
+  for (const playerId of playerIdToScore.keys()) {
+    promises.push(getPlayerFromId(playerId));
+  }
+  const players = await Promise.all(promises);
+  for (const player of players) {
+    if (player && player.id && player.username) {
+      playerIdToName.set(player.id, player.username);
+    }
+  }
+
   const message = sortedPlayerIdToScore.map(([playerId, score], index) => {
     let prefix = `(${(index + 1).toString()})`;
     if (index === 0) {

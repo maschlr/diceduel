@@ -1,5 +1,10 @@
 import { Context, InlineKeyboard } from "../../deps.ts";
-import { createGame, getGame, getPlayer, updateGame } from "../storage/kv.ts";
+import {
+  createGame,
+  getGame,
+  getPlayerFromContext,
+  updateGame,
+} from "../storage/kv.ts";
 import { CreateGameResult, GameState, Player } from "../models/game.ts";
 
 export async function acceptGameHandler(ctx: Context, gameId: string) {
@@ -26,7 +31,7 @@ export async function acceptGameHandler(ctx: Context, gameId: string) {
     await ctx.answerCallbackQuery("You are not the challenged player.");
     return;
   }
-  const opponent = await getPlayer(ctx);
+  const opponent = await getPlayerFromContext(ctx);
   game.opponent = opponent;
   game.state = GameState.Accepted;
 
@@ -51,7 +56,7 @@ export async function revengeHandler(ctx: Context, gameId: string) {
     return;
   }
 
-  const challenger = await getPlayer(ctx);
+  const challenger = await getPlayerFromContext(ctx);
   const opponent = challenger.id == oldGame?.challenger.id
     ? oldGame?.opponent
     : oldGame?.challenger;

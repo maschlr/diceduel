@@ -1,7 +1,7 @@
 import { Context, InlineKeyboard } from "../../deps.ts";
 import {
   determineScore,
-  getPlayer,
+  getPlayerFromContext,
   listGamesInChat,
   updateGameRoll,
 } from "../storage/kv.ts";
@@ -13,7 +13,7 @@ export async function rollDiceHandler(ctx: Context) {
   const games: Game[] = await listGamesInChat(chatId as string, [
     GameState.Accepted,
   ]);
-  const player = await getPlayer(ctx);
+  const player = await getPlayerFromContext(ctx);
   const playerIsChallenger = games.some((game) =>
     game.challenger.id === player.id
   );

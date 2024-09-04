@@ -1,5 +1,5 @@
 import { Context, InlineKeyboard } from "../../deps.ts";
-import { createGame, getGame, getPlayer } from "../storage/kv.ts";
+import { createGame, getGame, getPlayerFromContext } from "../storage/kv.ts";
 import { CreateGameResult, Player } from "../models/game.ts";
 
 export async function revengeHandler(ctx: Context, gameId: string) {
@@ -15,7 +15,7 @@ export async function revengeHandler(ctx: Context, gameId: string) {
     return;
   }
 
-  const challenger = await getPlayer(ctx);
+  const challenger = await getPlayerFromContext(ctx);
   const opponent = challenger.id == oldGame?.challenger.id
     ? oldGame?.opponent
     : oldGame?.challenger;

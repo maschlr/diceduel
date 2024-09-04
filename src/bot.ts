@@ -30,6 +30,7 @@ export async function setupBot(bot: Bot) {
       );
     }
   });
+
   await bot.api.setMyCommands([
     { command: "newgame", description: "Create a new game" },
     { command: "listgames", description: "List all games in current chat" },

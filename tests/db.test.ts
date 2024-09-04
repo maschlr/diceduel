@@ -3,7 +3,7 @@ import { Context } from "../deps.ts";
 import {
   createGame,
   getGame,
-  getPlayer,
+  getPlayerFromContext,
   listGamesInChat,
   updateGame,
 } from "../src/storage/kv.ts";
@@ -21,7 +21,7 @@ Deno.test("DB operations", async (t) => {
       from: { id: "123", username: "testuser" },
     } as Context;
 
-    const player = await getPlayer(ctx, kv);
+    const player = await getPlayerFromContext(ctx, kv);
     assertEquals(player.id, "123");
     assertEquals(player.username, "testuser");
   });
@@ -31,13 +31,13 @@ Deno.test("DB operations", async (t) => {
       from: { id: "123", username: "updateduser" },
     } as Context;
 
-    const playerBefore = await getPlayer(
+    const playerBefore = await getPlayerFromContext(
       { from: { id: "123", username: "testuser" } } as Context,
       kv,
     );
     assertEquals(playerBefore.username, "testuser");
 
-    const playerAfter = await getPlayer(ctx, kv);
+    const playerAfter = await getPlayerFromContext(ctx, kv);
     assertEquals(playerAfter.username, "updateduser");
   });
 

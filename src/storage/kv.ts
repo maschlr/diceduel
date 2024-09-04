@@ -16,7 +16,18 @@ try {
   console.error("Failed to open KV store", e);
 }
 
-export async function getPlayer(
+export async function getPlayerFromId(
+  id: string,
+  kv: Deno.Kv = kv_,
+): Promise<Player | null> {
+  const playerDbResult: Deno.KvEntryMaybe<Player> = await kv.get([
+    "players",
+    id,
+  ]);
+  return playerDbResult.value;
+}
+
+export async function getPlayerFromContext(
   ctx: Context,
   kv: Deno.Kv = kv_,
 ): Promise<Player> {
@@ -24,6 +35,7 @@ export async function getPlayer(
     throw new Error("No Player ID found in context");
   }
   const userId: string = ctx.from.id.toString();
+  const username: string = ctx.from.username || "";
 
   const playerDbResult: Deno.KvEntryMaybe<Player> = await kv.get([
     "players",
@@ -33,14 +45,14 @@ export async function getPlayer(
   if (!playerDbResult.value) {
     // create if doesn't exist
     player = {
-      id: ctx.from.id.toString(),
-      username: ctx.from.username || "",
+      id: userId,
+      username,
     };
     await kv.set(["players", userId], player);
-  } else if (playerDbResult.value.username !== ctx.from.username) {
+  } else if (playerDbResult.value.username !== username) {
     // update if username has changed
     player = playerDbResult.value;
-    player.username = ctx.from.username || "";
+    player.username = username;
     await kv.set(["players", userId], player);
   } else {
     // all up to date -> return

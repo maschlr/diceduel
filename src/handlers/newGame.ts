@@ -1,5 +1,5 @@
 import { Context, InlineKeyboard } from "../../deps.ts";
-import { createGame, getPlayer } from "../storage/kv.ts";
+import { createGame, getPlayerFromContext } from "../storage/kv.ts";
 import { CreateGameResult, Player } from "../models/game.ts";
 
 export async function newGameCommand(ctx: Context) {
@@ -18,7 +18,7 @@ export async function newGameCommand(ctx: Context) {
     return;
   }
 
-  const challenger: Player = await getPlayer(ctx);
+  const challenger: Player = await getPlayerFromContext(ctx);
   const args = ctx.match.toString().split(" ");
   const opponentUsername = args[0].replace("@", "");
   // extract the number of winning rounds from the ctx as a possible 2nd argument
