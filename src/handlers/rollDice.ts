@@ -1,4 +1,4 @@
-import { Context } from "../../deps.ts";
+import { Context, InlineKeyboard } from "../../deps.ts";
 import {
   determineScore,
   getPlayer,
@@ -72,13 +72,17 @@ export async function rollDiceHandler(ctx: Context) {
       const playerWins = playerIsChallenger
         ? challengerScore > opponentScore
         : opponentScore > challengerScore;
+      const keyboard = new InlineKeyboard()
+        .text("Revenge!", `revenge:${game.id}`);
       if (playerWins) {
         await ctx.reply(
-          `Winner, winner, chicken dinner! @${player.username} rolls a ${rollScore} and wins this game!\n\n${scoreCard}`,
+          `👑 Winner, winner, chicken dinner! @${player.username} rolls a ${rollScore} and wins this game!\n\n${scoreCard}`,
+          { reply_markup: keyboard },
         );
       } else {
         await ctx.reply(
-          `Winner, winner, chicken dinner! @${player.username} rolls a ${rollScore} and looses this round and the match! The winner is: @${otherPlayerUsername}!\n\n${scoreCard}`,
+          `👑Winner, winner, chicken dinner! @${player.username} rolls a ${rollScore} and looses this round and the match! The winner is: @${otherPlayerUsername}!\n\n${scoreCard}`,
+          { reply_markup: keyboard },
         );
       }
       break;

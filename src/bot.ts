@@ -1,7 +1,7 @@
 import { Bot, Context } from "../deps.ts";
 import { newGameCommand } from "./handlers/newGame.ts";
 import { listGamesCommand } from "./handlers/listGames.ts";
-import { acceptGameHandler } from "./handlers/acceptGame.ts";
+import { acceptGameHandler, revengeHandler } from "./handlers/acceptGame.ts";
 import { rollDiceHandler } from "./handlers/rollDice.ts";
 
 export async function setupBot(bot: Bot) {
@@ -11,6 +11,9 @@ export async function setupBot(bot: Bot) {
     const [fnc, arg] = ctx.callbackQuery.data.split(":");
     if (fnc === "accept_game") {
       await acceptGameHandler(ctx, arg);
+      return;
+    } else if (fnc === "revenge") {
+      await revengeHandler(ctx, arg);
       return;
     }
     console.log("Unknown button event with payload", ctx.callbackQuery.data);
