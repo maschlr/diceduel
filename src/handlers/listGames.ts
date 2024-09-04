@@ -36,7 +36,7 @@ export async function listGamesCommand(ctx: Context) {
         status = "Finished";
         break;
     }
-    return `${game.challenger} vs ${game.opponent} - ${status}`;
+    return `@${game.challenger.username} vs @${game.opponent.username} - ${status}`;
   }).join("\n");
 
   await ctx.reply(`Active games in this channel:\n\n${gameList}`);
