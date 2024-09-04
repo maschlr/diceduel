@@ -37,8 +37,10 @@ export async function rollDiceHandler(ctx: Context) {
     ? game.opponent.username
     : game.challenger.username;
   const { challengerScore, opponentScore } = determineScore(rollResult.game);
+  const playerScore = playerIsChallenger ? challengerScore : opponentScore;
+  const otherPlayerScore = playerIsChallenger ? opponentScore : challengerScore;
   const scoreCard =
-    `Score:\n @${player.username} ${challengerScore}/${rollResult.game.winningRounds} - ${opponentScore}/${rollResult.game.winningRounds} @${otherPlayerUsername}`;
+    `Score:\n @${player.username} ${playerScore}/${rollResult.game.winningRounds} - ${otherPlayerScore}/${rollResult.game.winningRounds} @${otherPlayerUsername}`;
 
   switch (rollResult.status) {
     case RollStatus.win:
