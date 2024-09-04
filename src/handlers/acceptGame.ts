@@ -42,9 +42,10 @@ export async function revengeHandler(ctx: Context, gameId: string) {
   const oldGame = await getGame(ctx, gameId);
 
   // only the challenger or opponent can call for a revenge
+  const userId = ctx.from?.id.toString();
   if (
-    ctx.from?.id !== oldGame?.challenger.id &&
-    ctx.from?.id !== oldGame?.opponent.id
+    userId !== oldGame?.challenger.id &&
+    userId !== oldGame?.opponent.id
   ) {
     await ctx.answerCallbackQuery("You are not the challenger or opponent.");
     return;
