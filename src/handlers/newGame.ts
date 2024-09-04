@@ -12,7 +12,7 @@ export async function newGameCommand(ctx: Context) {
 
   if (!ctx.match) {
     await ctx.reply(
-      "Please mention the player you want to challenge\. \(Usage: `/newgame @<opponent> [number of winning rounds]`\)",
+      "Please mention the player you want to challenge\\. \\(Usage: `/newgame @<opponent> [number of winning rounds]`\\)",
       { parse_mode: "MarkdownV2" },
     );
     return;
