@@ -54,7 +54,7 @@ export async function scoreBoardHandler(ctx: Context) {
     } else if (index === 2) {
       prefix = "🥉";
     }
-    return `${prefix} ${playerIdToName.get(playerId)}: ${score}`;
+    return `${prefix} @${playerIdToName.get(playerId)}: ${score}`;
   }).join("\n");
-  await ctx.reply(message);
+  await ctx.reply(`Scoreboard:\n\n${message}`);
 }
