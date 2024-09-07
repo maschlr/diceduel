@@ -36,6 +36,7 @@ export async function getPlayerFromContext(
   }
   const userId: string = ctx.from.id.toString();
   const username: string = ctx.from.username || "";
+  const first_name: string = ctx.from.first_name;
 
   const playerDbResult: Deno.KvEntryMaybe<Player> = await kv.get([
     "players",
@@ -47,12 +48,17 @@ export async function getPlayerFromContext(
     player = {
       id: userId,
       username,
+      first_name,
     };
     await kv.set(["players", userId], player);
-  } else if (playerDbResult.value.username !== username) {
-    // update if username has changed
+  } else if (
+    playerDbResult.value.username !== username ||
+    playerDbResult.value.first_name !== first_name
+  ) {
+    // update if username or first_name has changed
     player = playerDbResult.value;
     player.username = username;
+    player.first_name = first_name;
     await kv.set(["players", userId], player);
   } else {
     // all up to date -> return

@@ -9,12 +9,8 @@ import {
 } from "../src/storage/kv.ts";
 import { GameState, Player } from "../src/models/game.ts";
 
-let kv: Deno.Kv;
-
 Deno.test("DB operations", async (t) => {
-  await t.step("Initialize DB", async () => {
-    kv = await Deno.openKv(":memory:");
-  });
+  const kv = await Deno.openKv(":memory:");
 
   await t.step("Create new Player in DB", async () => {
     const ctx: Context = {
@@ -24,6 +20,16 @@ Deno.test("DB operations", async (t) => {
     const player = await getPlayerFromContext(ctx, kv);
     assertEquals(player.id, "123");
     assertEquals(player.username, "testuser");
+  });
+
+  await t.step("Create new Player without username in DB", async () => {
+    const ctx: Context = {
+      from: { id: "456", first_name: "testuserWithoutUsername" },
+    } as Context;
+
+    const player = await getPlayerFromContext(ctx, kv);
+    assertEquals(player.id, "456");
+    assertEquals(player.first_name, "testuserWithoutUsername");
   });
 
   await t.step("Update Player username", async () => {
@@ -97,10 +103,5 @@ Deno.test("DB operations", async (t) => {
     );
   });
 
-  await t.step("Clean up", async () => {
-    for await (const entry of kv.list({ prefix: [] })) {
-      await kv.delete(entry.key);
-    }
-    await kv.close();
-  });
+  await kv.close();
 });

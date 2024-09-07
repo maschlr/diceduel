@@ -27,7 +27,10 @@ export async function acceptGameHandler(ctx: Context, gameId: string) {
     return;
   }
 
-  if (ctx.from?.username !== game.opponent.username) {
+  if (
+    ctx.from?.username !== game.opponent.username &&
+    ctx.from?.first_name !== game.opponent.first_name
+  ) {
     await ctx.answerCallbackQuery("You are not the challenged player.");
     return;
   }
@@ -36,6 +39,7 @@ export async function acceptGameHandler(ctx: Context, gameId: string) {
   game.state = GameState.Accepted;
 
   await Promise.all([
+    ctx.answerCallbackQuery("Game accepted."),
     updateGame(ctx, game),
     ctx.reply(
       `Game on! Players, roll your dice!`,
