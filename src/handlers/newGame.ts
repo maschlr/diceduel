@@ -20,17 +20,26 @@ export async function newGameCommand(ctx: Context) {
 
   const challenger: Player = await getPlayerFromContext(ctx);
   const args = ctx.match.toString().split(" ");
-  const opponentUsername = args[0].replace("@", "");
+  const opponentUsernameOrFirstName = args[0].replace("@", "");
   // extract the number of winning rounds from the ctx as a possible 2nd argument
   const winningRounds = args.length > 1 ? parseInt(args[1]) : 1;
 
-  if (challenger.username === opponentUsername) {
+  if (isNaN(winningRounds)) {
+    await ctx.reply("The number of winning rounds must be a number!");
+    return;
+  }
+
+  if (
+    challenger.username === opponentUsernameOrFirstName ||
+    challenger.first_name === opponentUsernameOrFirstName
+  ) {
     await ctx.reply("You can't challenge yourself!");
     return;
   }
 
+  // this might be a username or first name
   const opponent: Player = {
-    username: opponentUsername,
+    username: opponentUsernameOrFirstName,
   };
   const createGameResult: CreateGameResult = await createGame(
     challenger,
@@ -50,7 +59,9 @@ export async function newGameCommand(ctx: Context) {
     .text("Accept Challenge", `accept_game:${createGameResult.game?.id}`);
 
   await ctx.reply(
-    `🎲 @${challenger.username} has challenged @${opponent.username} to a dice duel with ${winningRounds} winning rounds! 🎲`,
+    `🎲 @${
+      challenger.username || challenger.first_name
+    } has challenged @${opponent.username} to a dice duel with ${winningRounds} winning rounds! 🎲`,
     { reply_markup: keyboard, protect_content: true },
   );
 }

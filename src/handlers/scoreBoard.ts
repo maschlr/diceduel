@@ -40,8 +40,11 @@ export async function scoreBoardHandler(ctx: Context) {
   }
   const players = await Promise.all(promises);
   for (const player of players) {
-    if (player && player.id && player.username) {
-      playerIdToName.set(player.id, player.username);
+    if (player && player.id && (player.username || player.first_name)) {
+      playerIdToName.set(
+        player.id,
+        (player.username || player.first_name) as string,
+      );
     }
   }
 

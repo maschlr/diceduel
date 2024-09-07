@@ -33,8 +33,8 @@ export interface Game {
 
 export interface Player {
   id?: string;
-  username: string;
-  first_name: string; // use snake case like TG
+  username?: string;
+  first_name?: string; // use snake case like TG
 }
 
 export interface CreateGameResult {

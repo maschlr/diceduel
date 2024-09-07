@@ -38,10 +38,13 @@ export async function revengeHandler(ctx: Context, gameId: string) {
   const keyboard = new InlineKeyboard()
     .text("Accept Challenge", `accept_game:${createGameResult.game?.id}`);
 
-  await ctx.reply(
-    `🎲 @${challenger.username} has challenged @${opponent?.username} to a dice duel with ${
-      oldGame?.winningRounds || 1
-    } winning rounds! 🎲`,
-    { reply_markup: keyboard },
-  );
+  await Promise.all([
+    ctx.reply(
+      `🎲 @${challenger.username || challenger.first_name} has challenged @${
+        opponent?.username || opponent?.first_name
+      } to a dice duel with ${oldGame?.winningRounds || 1} winning rounds! 🎲`,
+      { reply_markup: keyboard },
+    ),
+    ctx.answerCallbackQuery(),
+  ]);
 }

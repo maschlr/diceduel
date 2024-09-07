@@ -29,7 +29,7 @@ export async function acceptGameHandler(ctx: Context, gameId: string) {
 
   if (
     ctx.from?.username !== game.opponent.username &&
-    ctx.from?.first_name !== game.opponent.first_name
+    ctx.from?.first_name !== game.opponent.username
   ) {
     await ctx.answerCallbackQuery("You are not the challenged player.");
     return;
@@ -84,9 +84,9 @@ export async function revengeHandler(ctx: Context, gameId: string) {
     .text("Accept Challenge", `accept_game:${createGameResult.game?.id}`);
 
   await ctx.reply(
-    `🎲 @${challenger.username} has challenged @${opponent?.username} to a dice duel with ${
-      oldGame?.winningRounds || 1
-    } winning rounds! 🎲`,
+    `🎲 @${challenger.username || challenger.first_name} has challenged @${
+      opponent?.username || opponent?.first_name
+    } to a dice duel with ${oldGame?.winningRounds || 1} winning rounds! 🎲`,
     { reply_markup: keyboard },
   );
 }

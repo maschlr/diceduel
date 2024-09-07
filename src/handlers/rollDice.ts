@@ -34,8 +34,8 @@ export async function rollDiceHandler(ctx: Context) {
   );
 
   const otherPlayerUsername = playerIsChallenger
-    ? game.opponent.username
-    : game.challenger.username;
+    ? game.opponent.username || game.opponent.first_name
+    : game.challenger.username || game.challenger.first_name;
   const { challengerScore, opponentScore } = determineScore(rollResult.game);
   const playerScore = playerIsChallenger ? challengerScore : opponentScore;
   const otherPlayerScore = playerIsChallenger ? opponentScore : challengerScore;
@@ -45,27 +45,39 @@ export async function rollDiceHandler(ctx: Context) {
   switch (rollResult.status) {
     case RollStatus.win:
       await ctx.reply(
-        `@${player.username} rolls a ${rollScore}! This round goes to @${player.username}!\n\n${scoreCard}`,
+        `@${
+          player.username || player.first_name
+        } rolls a ${rollScore}! This round goes to @${
+          player.username || player.first_name
+        }!\n\n${scoreCard}`,
       );
       break;
     case RollStatus.loose:
       await ctx.reply(
-        `@${player.username} rolls a ${rollScore}! This round goes to @${otherPlayerUsername}!\n\n${scoreCard}`,
+        `@${
+          player.username || player.first_name
+        } rolls a ${rollScore}! This round goes to @${otherPlayerUsername}!\n\n${scoreCard}`,
       );
       break;
     case RollStatus.invalid:
       await ctx.reply(
-        `Sorry, @${player.username} it's not your turn. @${otherPlayerUsername} needs to roll first.`,
+        `Sorry, @${
+          player.username || player.first_name
+        } it's not your turn. @${otherPlayerUsername} needs to roll first.`,
       );
       break;
     case RollStatus.tie:
       await ctx.reply(
-        `@${player.username} rolls a ${rollScore}! This round is a tie!\n\n${scoreCard}`,
+        `@${
+          player.username || player.first_name
+        } rolls a ${rollScore}! This round is a tie!\n\n${scoreCard}`,
       );
       break;
     case RollStatus.open:
       await ctx.reply(
-        `@${player.username} rolls a ${rollScore} and opens this round! It's your turn @${otherPlayerUsername}!`,
+        `@${
+          player.username || player.first_name
+        } rolls a ${rollScore} and opens this round! It's your turn @${otherPlayerUsername}!`,
       );
       break;
     case RollStatus.closed: {
@@ -76,12 +88,16 @@ export async function rollDiceHandler(ctx: Context) {
         .text("Revenge!", `revenge:${game.id}`);
       if (playerWins) {
         await ctx.reply(
-          `👑 Winner, winner, chicken dinner! @${player.username} rolls a ${rollScore} and wins this game!\n\n${scoreCard}`,
+          `👑 Winner, winner, chicken dinner! @${
+            player.username || player.first_name
+          } rolls a ${rollScore} and wins this game!\n\n${scoreCard}`,
           { reply_markup: keyboard },
         );
       } else {
         await ctx.reply(
-          `👑Winner, winner, chicken dinner! @${player.username} rolls a ${rollScore} and looses this round and the match! The winner is: @${otherPlayerUsername}!\n\n${scoreCard}`,
+          `👑Winner, winner, chicken dinner! @${
+            player.username || player.first_name
+          } rolls a ${rollScore} and looses this round and the match! The winner is: @${otherPlayerUsername}!\n\n${scoreCard}`,
           { reply_markup: keyboard },
         );
       }
