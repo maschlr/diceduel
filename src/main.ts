@@ -1,6 +1,6 @@
 import { Bot, webhookCallback } from "../deps.ts";
 import { setupBot } from "./bot.ts";
-import { logError } from "./handlers/admin.ts";
+import { logErrorToAdminChat } from "./handlers/admin.ts";
 
 export const bot = new Bot(Deno.env.get("BOT_TOKEN") || "");
 
@@ -17,10 +17,17 @@ if (webhookUrl) {
       const response = await webhookCallback(bot, "std/http")(request);
       return response;
     } catch (error) {
-      console.error("Error in webhook handler:", error);
-      await logError(error);
-      return new Response("Internal Server Error", { status: 500 });
+      try {
+        const errorMessage = JSON.parse(error);
+        if (errorMessage.error_code) {
+          console.error("Error in webhook handler:", errorMessage);
+          await logErrorToAdminChat(errorMessage);
+        }
+      } catch (_e) {
+        console.error("Error parsing JSON body:", error);
+      }
     }
+    return new Response("OK", { status: 500 });
   };
 
   // Start the bot with the custom handler
